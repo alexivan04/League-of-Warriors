@@ -12,7 +12,6 @@ import java.util.TreeSet;
 
 public class JsonInput {
     static String accountPath = "accounts.json";
-    static String newAccountPath = "accounts_backup.json";
     public static ArrayList<Account> deserializeAccounts() {
         JSONParser parser = new JSONParser();
 

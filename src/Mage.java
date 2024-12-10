@@ -3,7 +3,6 @@ import java.util.Random;
 public class Mage extends Character{
     public Mage(String name, int experience, int level) {
         super(name, experience, level);
-        Random rand = new Random();
         strength = 5;
         charisma = 10;
         dexterity = 5;

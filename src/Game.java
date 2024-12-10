@@ -126,7 +126,6 @@ public class Game {
     }
     public void chooseNextAction() throws InvalidGridSize {
         // display all current options
-        Cell playerCell = map.getPlayerCell();
         map.printGrid();
         System.out.println("Choose direction: N S E W (or quit game - Q)");
         System.out.println("Player: \n\thealth: " + map.getPlayer().health + "\n\tmana: " + map.getPlayer().mana);

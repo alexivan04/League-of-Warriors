@@ -49,10 +49,6 @@ public abstract class Character extends Entity{
         System.out.println(name + " received " + damage + " damage");
     }
 
-    public void gainExperience(int experience) {
-        this.experience += experience;
-    }
-
     public void printCharacter() {
         System.out.println("\tName: " + name);
         System.out.println("\tLevel: " + level);
