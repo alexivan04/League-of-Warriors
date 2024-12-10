@@ -2,16 +2,13 @@ import java.util.Random;
 
 public class Warrior extends Character{
     public Warrior(String name, int experience, int level) {
-        super(name, 0, 1);
+        super(name, experience, level);
         strength = 10;
         charisma = 5;
         dexterity = 5;
         fireImmunity = true;
         earthImmunity = false;
         iceImmunity = false;
-//        for(int i = 1; i < level; i++)
-//            this.levelUp();
-       this.experience = experience;
     }
 
     @Override

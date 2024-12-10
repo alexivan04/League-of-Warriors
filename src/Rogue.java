@@ -9,9 +9,6 @@ public class Rogue extends Character{
         fireImmunity = false;
         earthImmunity = true;
         iceImmunity = false;
-//        for(int i = 1; i < level; i++)
-//            this.levelUp();
-        this.experience = experience;
     }
 
     @Override

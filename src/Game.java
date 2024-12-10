@@ -14,11 +14,17 @@ public class Game {
     String username;
     String password;
 
+    int characterChoice;
+    int attackChoice;
+    boolean useKeyboardInput;
+
     public Game() {
         gameEnded = false;
         level = 1;
         input = new Scanner(System.in);
         rand = new Random();
+        characterChoice = -1;
+        useKeyboardInput = true;
     }
 
     public void makeAction() {
@@ -27,12 +33,14 @@ public class Game {
                 System.out.println("Level finished");
                 map.getPlayer().addExperience(level * 5);
                 level++;
+                currAccount.gamesNumber++;
                 map.getPlayer().regenMana(map.getPlayer().maxMana);
                 map.getPlayer().regenHealth(map.getPlayer().health);
                 System.out.println("New level: " + level + " \n");
                 Character playerCpy = map.getPlayer();
                 map = Grid.generateGrid(rand.nextInt(6) + 5, rand.nextInt(6) + 5);
                 map.setPlayer(playerCpy);
+                JsonInput.writeAccountsToJson(accounts);
                 break;
 
             case SANCTUARY:
@@ -44,38 +52,40 @@ public class Game {
                 break;
 
             case ENEMY:
-                int choice;
                 Enemy enemy = new Enemy();
                 enemy.generateRandomAbilities();
                 map.getPlayer().generateRandomAbilities();
                 System.out.println("Enemy ahead!");
                 while(enemy.health > 0 && map.getPlayer().health > 0) {
                     System.out.println("Make a choice:\n\t1) Attack\n\t2) Use Ability");
-                    try {
-                        choice = input.nextInt(); //TODO: exception handling
+                    if(useKeyboardInput) {
+                        try {
+                            attackChoice = input.nextInt(); //TODO: exception handling
+                        } catch (InputMismatchException e) {
+                            System.out.println("Invalid input, try again.");
+                            input.nextLine();
+                            continue;
+                        }
                     }
-                    catch (InputMismatchException e) {
-                        System.out.println("Invalid input, try again.");
-                        input.nextLine();
-                        continue;
-                    }
-                    if (choice == 1)
+                    if (attackChoice == 1)
                         enemy.recieveDamage(map.getPlayer().getDamage());
-                    else if (choice == 2) {
+                    else if (attackChoice == 2) {
                         if(map.getPlayer().displayAbilities()) {
                             boolean validAbilityChoice = false;
                             int abilityChoice;
                             while(!validAbilityChoice) {
                                 validAbilityChoice = true;
-                                try {
-                                    abilityChoice = input.nextInt();
+                                if(useKeyboardInput) {
+                                    try {
+                                        abilityChoice = input.nextInt();
+                                    } catch (InputMismatchException e) {
+                                        System.out.println("Invalid input, try again.");
+                                        input.nextLine();
+                                        validAbilityChoice = false;
+                                        continue;
+                                    }
                                 }
-                                catch (InputMismatchException e) {
-                                    System.out.println("Invalid input, try again.");
-                                    input.nextLine();
-                                    validAbilityChoice = false;
-                                    continue;
-                                }
+                                else abilityChoice = 0;
                                 map.getPlayer().useAbility(abilityChoice, enemy);
                             }
                         }
@@ -161,6 +171,7 @@ public class Game {
                 case 'Q':
                 case 'q':
                     gameEnded = true;
+                    JsonInput.writeAccountsToJson(accounts);
                     return;
                 default:
                     System.out.println("Invalid direction, try again.");
@@ -219,24 +230,25 @@ public class Game {
                         currAccount.getCharacters().get(i).printCharacter();
                     }
 
-                    int choice;
-                    try {
-                        choice = input.nextInt();
+                    if(useKeyboardInput) {
+                        try {
+                            characterChoice = input.nextInt();
+                        } catch (InputMismatchException e) {
+                            System.out.println("Invalid input, try again.");
+                            input.nextLine();
+                            invalidChoice = true;
+                            continue;
+                        }
                     }
-                    catch (InputMismatchException e) {
-                        System.out.println("Invalid input, try again.");
-                        input.nextLine();
-                        invalidChoice = true;
-                        continue;
-                    }
-                    if (choice < 0 || choice >= currAccount.getCharacters().size()) {
+
+                    if (characterChoice < 0 || characterChoice >= currAccount.getCharacters().size()) {
                         System.out.println("Invalid choice, try again.");
                         invalidChoice = true;
                     }
                     else {
-//                        map.setPlayer(currAccount.getCharacters().get(choice));
-                        System.out.println("Playing as " + currAccount.getCharacters().get(choice).name);
-                        currCharacter = currAccount.getCharacters().get(choice);
+//                        map.setPlayer(currAccount.getCharacters().get(characterChoice));
+                        System.out.println("Playing as " + currAccount.getCharacters().get(characterChoice).name);
+                        currCharacter = currAccount.getCharacters().get(characterChoice);
                         System.out.println("Characteristics: \n\t-strength: " + currCharacter.strength + "\n\t-charisma: " + currCharacter.charisma +
                                 "\n\t-dexterity: " + currCharacter.dexterity);
                     }

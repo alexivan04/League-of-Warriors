@@ -3,7 +3,7 @@ import java.io.ByteArrayInputStream;
 public class Main {
     public static void main(String[] args) throws InvalidGridSize {
         Game game = new Game();
-        while(true) {
+        while(!game.gameEnded) {
             if(game.username == null || game.password == null) {
                 do {
                     System.out.print("Username: ");

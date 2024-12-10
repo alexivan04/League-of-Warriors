@@ -34,12 +34,13 @@ public abstract class Character extends Entity{
 
     public void addExperience(int experience) {
         this.experience += experience;
-        if(this.experience >= this.level * this.experienceTreshold) {
+        while (this.experience >= this.level * this.experienceTreshold) {
             this.experience -= this.level * this.experienceTreshold;
             levelUp();
         }
-        System.out.println("level: " + level + " experience " + experience );
+        System.out.println("level: " + level + ", experience: " + this.experience);
     }
+
 
     @Override
     public void recieveDamage(int damage) {
