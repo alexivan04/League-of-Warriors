@@ -67,22 +67,21 @@ public abstract class Entity implements Battle{
                currSpell.getClass().equals(Fire.class) && fireImmunity ||
                currSpell.getClass().equals(Earth.class) && earthImmunity) {
                 System.out.println(entity.getClass().getSimpleName() + " has " + currSpell.getClass().getSimpleName() + " resistance.");
-                entity.recieveDamage(getDamage());
+                entity.receiveDamage(getDamage());
                 spells.remove(i);
                 useMana(currSpell.manaCost);
             }
 
             else {
                 System.out.println(currSpell.getClass().getSimpleName() + " damaged " + entity.getClass().getSimpleName());
-                entity.recieveDamage(currSpell.damage + getDamage());
+                entity.receiveDamage(currSpell.damage + getDamage());
                 spells.remove(i);
                 useMana(currSpell.manaCost);
             }
         }
         else {
-            entity.recieveDamage(getDamage());
+            System.out.println("Not enough mana, using normal attack!");
+            entity.receiveDamage(getDamage());
         }
-
-        // else do basic attack
     }
 }

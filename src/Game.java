@@ -30,104 +30,117 @@ public class Game {
     public void makeAction() {
         switch (map.get(map.getPlayerCell().getX()).get(map.getPlayerCell().getY()).getType()) {
             case PORTAL:
-                System.out.println("Level finished");
-                map.getPlayer().addExperience(level * 5);
-                level++;
-                currAccount.gamesNumber++;
-                map.getPlayer().regenMana(map.getPlayer().maxMana);
-                map.getPlayer().regenHealth(map.getPlayer().health);
-                System.out.println("New level: " + level + " \n");
-                Character playerCpy = map.getPlayer();
-                map = Grid.generateGrid(rand.nextInt(6) + 5, rand.nextInt(6) + 5);
-                map.setPlayer(playerCpy);
-                JsonInput.writeAccountsToJson(accounts);
+                portalAction();
                 break;
 
             case SANCTUARY:
-                int healthRegen = rand.nextInt(20) + 10;
-                int manaRegen = rand.nextInt(50) + 20;
-                map.getPlayer().regenHealth(healthRegen);
-                map.getPlayer().regenMana(manaRegen);
-                System.out.println("Healing: \n\t" + map.getPlayer().health + " health \n\t" +  map.getPlayer().mana + " mana");
+                sanctuaryAction();
                 break;
 
             case ENEMY:
-                Enemy enemy = new Enemy();
-                enemy.generateRandomAbilities();
-                map.getPlayer().generateRandomAbilities();
-                System.out.println("Enemy ahead!");
-                while(enemy.health > 0 && map.getPlayer().health > 0) {
-                    System.out.println("Make a choice:\n\t1) Attack\n\t2) Use Ability");
-                    if(useKeyboardInput) {
-                        try {
-                            attackChoice = input.nextInt(); //TODO: exception handling
-                        } catch (InputMismatchException e) {
-                            System.out.println("Invalid input, try again.");
-                            input.nextLine();
-                            continue;
-                        }
-                    }
-                    if (attackChoice == 1)
-                        enemy.recieveDamage(map.getPlayer().getDamage());
-                    else if (attackChoice == 2) {
-                        if(map.getPlayer().displayAbilities()) {
-                            boolean validAbilityChoice = false;
-                            int abilityChoice;
-                            while(!validAbilityChoice) {
-                                validAbilityChoice = true;
-                                if(useKeyboardInput) {
-                                    try {
-                                        abilityChoice = input.nextInt();
-                                    } catch (InputMismatchException e) {
-                                        System.out.println("Invalid input, try again.");
-                                        input.nextLine();
-                                        validAbilityChoice = false;
-                                        continue;
-                                    }
-                                }
-                                else abilityChoice = 0;
-                                map.getPlayer().useAbility(abilityChoice, enemy);
-                            }
-                        }
-                        else continue;
-                    }
-
-                    boolean useAbility = rand.nextBoolean();
-                    if(useAbility && !enemy.spells.isEmpty()) {
-                        int ability = rand.nextInt(enemy.spells.size());
-                        enemy.useAbility(ability, map.getPlayer());
-                    }
-                    else {
-                        map.getPlayer().recieveDamage(enemy.getDamage());
-                    }
-
-                    System.out.println("Enemy health: " + enemy.health);
-                    System.out.println("Player: \n\thealth: " + map.getPlayer().health + "\n\tmana: " + map.getPlayer().mana);
-                }
-
-                if(map.getPlayer().health <= 0) {
-                    System.out.println("Game Over!");
-                    gameEnded = true;
-                    map.getPlayer().regenHealth(map.getPlayer().maxHealth);
-                    map.getPlayer().regenMana(map.getPlayer().maxMana);
-                }
-
-                else if(enemy.health <= 0) {
-                    System.out.println("Enemy defeated");
-                    map.getPlayer().regenHealth(10);
-                    map.getPlayer().regenMana(100);
-                    map.getPlayer().addExperience(rand.nextInt(11) + 5);
-                }
+                enemyAction();
                 break;
 
             default:
                 break;
         }
     }
+
+    private void enemyAction() {
+        Enemy enemy = new Enemy();
+        enemy.generateRandomAbilities();
+        map.getPlayer().generateRandomAbilities();
+        System.out.println("Enemy ahead!");
+        while(enemy.health > 0 && map.getPlayer().health > 0) {
+            System.out.println("Make a choice:\n\t1) Attack\n\t2) Use Ability");
+            if(useKeyboardInput) {
+                try {
+                    attackChoice = input.nextInt();
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input, try again.");
+                    input.nextLine();
+                    continue;
+                }
+            }
+            if (attackChoice == 1)
+                enemy.receiveDamage(map.getPlayer().getDamage());
+            else if (attackChoice == 2) {
+                if(map.getPlayer().displayAbilities()) {
+                    boolean validAbilityChoice = false;
+                    int abilityChoice;
+                    while(!validAbilityChoice) {
+                        validAbilityChoice = true;
+                        if(useKeyboardInput) {
+                            try {
+                                abilityChoice = input.nextInt();
+                            } catch (InputMismatchException e) {
+                                System.out.println("Invalid input, try again.");
+                                input.nextLine();
+                                validAbilityChoice = false;
+                                continue;
+                            }
+                        }
+                        else abilityChoice = 0;
+                        map.getPlayer().useAbility(abilityChoice, enemy);
+                    }
+                }
+                else continue;
+            }
+
+            boolean useAbility = rand.nextBoolean();
+            if(useAbility && !enemy.spells.isEmpty()) {
+                int ability = rand.nextInt(enemy.spells.size());
+                enemy.useAbility(ability, map.getPlayer());
+            }
+            else {
+                map.getPlayer().receiveDamage(enemy.getDamage());
+            }
+
+            System.out.println("Enemy health: " + enemy.health);
+            System.out.println("Player: \n\thealth: " + map.getPlayer().health + "\n\tmana: " + map.getPlayer().mana);
+        }
+
+        if(map.getPlayer().health <= 0) {
+            System.out.println("Game Over!");
+            gameEnded = true;
+            map.getPlayer().regenHealth(map.getPlayer().maxHealth);
+            map.getPlayer().regenMana(map.getPlayer().maxMana);
+        }
+
+        else if(enemy.health <= 0) {
+            System.out.println("Enemy defeated");
+            map.getPlayer().regenHealth(10);
+            map.getPlayer().regenMana(100);
+            map.getPlayer().addExperience(rand.nextInt(11) + 5);
+        }
+    }
+
+    private void sanctuaryAction() {
+        int healthRegen = rand.nextInt(20) + 10;
+        int manaRegen = rand.nextInt(50) + 20;
+        map.getPlayer().regenHealth(healthRegen);
+        map.getPlayer().regenMana(manaRegen);
+        System.out.println("Healing: \n\t" + map.getPlayer().health + " health \n\t" +  map.getPlayer().mana + " mana");
+    }
+
+    private void portalAction() {
+        System.out.println("Level finished");
+        map.getPlayer().addExperience(level * 5);
+        level++;
+        currAccount.gamesNumber++;
+        map.getPlayer().regenMana(map.getPlayer().maxMana);
+        map.getPlayer().regenHealth(map.getPlayer().health);
+        System.out.println("New level: " + level + " \n");
+        Character playerCpy = map.getPlayer();
+        map = Grid.generateGrid(rand.nextInt(6) + 5, rand.nextInt(6) + 5);
+        map.setPlayer(playerCpy);
+        JsonInput.writeAccountsToJson(accounts);
+    }
+
     public void chooseNextAction() throws InvalidGridSize {
         // display all current options
         map.printGrid();
-        System.out.println("Choose direction: N S E W (or quit game - Q)");
+        System.out.println("Choose direction: W A S D (or quit game - Q)");
         System.out.println("Player: \n\thealth: " + map.getPlayer().health + "\n\tmana: " + map.getPlayer().mana);
 
         boolean validDirection = false;
@@ -135,8 +148,8 @@ public class Game {
             validDirection = true;
             char direction = input.next().charAt(0);
             switch (direction) {
-                case 'N':
-                case 'n':
+                case 'W':
+                case 'w':
                     try {
                         map.goNorth();
                     } catch (ImpossibleMove e) {
@@ -151,16 +164,16 @@ public class Game {
                         System.out.println(e.getMessage());
                     }
                     break;
-                case 'E':
-                case 'e':
+                case 'D':
+                case 'd':
                     try {
                         map.goEast();
                     } catch (ImpossibleMove e) {
                         System.out.println(e.getMessage());
                     }
                     break;
-                case 'W':
-                case 'w':
+                case 'A':
+                case 'a':
                     try {
                         map.goWest();
                     } catch (ImpossibleMove e) {
@@ -245,7 +258,6 @@ public class Game {
                         invalidChoice = true;
                     }
                     else {
-//                        map.setPlayer(currAccount.getCharacters().get(characterChoice));
                         System.out.println("Playing as " + currAccount.getCharacters().get(characterChoice).name);
                         currCharacter = currAccount.getCharacters().get(characterChoice);
                         System.out.println("Characteristics: \n\t-strength: " + currCharacter.strength + "\n\t-charisma: " + currCharacter.charisma +

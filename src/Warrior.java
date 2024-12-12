@@ -20,11 +20,11 @@ public class Warrior extends Character{
     }
 
     @Override
-    public void recieveDamage(int damage) {
+    public void receiveDamage(int damage) {
         Random rand = new Random();
         if(rand.nextInt(100)  + dexterity / 2 + charisma / 2 > 50)
             damage /= 2;
-        super.recieveDamage(damage);
+        super.receiveDamage(damage);
     }
 
     @Override

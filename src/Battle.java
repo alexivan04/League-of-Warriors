@@ -1,4 +1,4 @@
 public interface Battle {
-    public void recieveDamage(int damage);
+    public void receiveDamage(int damage);
     public int getDamage();
 }

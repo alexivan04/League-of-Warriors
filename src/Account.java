@@ -9,7 +9,7 @@ public class Account {
     public static class Information
     {
         private Credentials credentials;
-        private SortedSet<String> favoriteGames; //sorted alfabetically
+        private SortedSet<String> favoriteGames;
         private String name;
         private String country;
 
@@ -89,34 +89,5 @@ public class Account {
 
     public void removeCharacter(Character character) {
         characters.remove(character);
-    }
-
-    public void printAccount() {
-        System.out.println("Account information:");
-        System.out.println("Name: " + information.getName());
-        System.out.println("Country: " + information.getCountry());
-        System.out.println("Favorite games: ");
-        for (String game : information.getFavoriteGames()) {
-            System.out.println(game);
-        }
-        System.out.println("Number of games played: " + gamesNumber);
-        System.out.println("Characters: ");
-        for (Character character : characters) {
-            character.printCharacter();
-        }
-    }
-
-    public void printCharacters() {
-        System.out.println("Characters: ");
-        for (Character character : characters) {
-            character.printCharacter();
-        }
-    }
-    public void nextChoice() {
-        System.out.println("What would you like to do next?");
-        System.out.println("1. Create a new character");
-        System.out.println("2. Select a character");
-        System.out.println("3. Delete a character");
-        System.out.println("4. Exit");
     }
 }

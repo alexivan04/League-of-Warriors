@@ -24,7 +24,6 @@ public class Grid extends ArrayList<ArrayList<Cell>> {
         do {
             x = rand.nextInt(grid.rows - 1);
             y = rand.nextInt(grid.columns - 1);
-//            System.out.println("Curr: x - " + x + ", y - " + y + ", type: " + grid.get(x).get(y).getType().toString());
         } while(grid.get(x).get(y).getType() != CellEntityType.VOID);
 
         grid.get(x).get(y).setType(type);
@@ -157,8 +156,8 @@ public class Grid extends ArrayList<ArrayList<Cell>> {
             for (int j = 0; j < columns; j++) {
                 if (playerCell.getX() == i && playerCell.getY() == j) {
                     System.out.print("P ");
-                } else if (!get(i).get(j).isVisited()) {
-                    System.out.print("N ");
+//                } else if (!get(i).get(j).isVisited()) {
+//                    System.out.print("N ");
                 } else {
                     switch (get(i).get(j).getType()) {
                         case VOID:

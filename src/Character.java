@@ -29,6 +29,10 @@ public abstract class Character extends Entity{
 
     public void levelUp() {
         this.level++;
+        maxHealth += 20;
+        maxMana += 20;
+        health = maxHealth;
+        mana = maxMana;
         System.out.println(name + " leveled up: " + level);
     }
 
@@ -43,7 +47,7 @@ public abstract class Character extends Entity{
 
 
     @Override
-    public void recieveDamage(int damage) {
+    public void receiveDamage(int damage) {
         health -= damage;
         if(health <= 0) health = 0;
         System.out.println(name + " received " + damage + " damage");

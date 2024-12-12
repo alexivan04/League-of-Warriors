@@ -19,7 +19,7 @@ public class Enemy extends Entity{
     }
 
     @Override
-    public void recieveDamage(int damage) {
+    public void receiveDamage(int damage) {
         Random rand = new Random();
         if(rand.nextInt(100) < 50){
             System.out.println("Enemy avoided damage");
