@@ -86,6 +86,10 @@ public class Game {
                 }
                 else continue;
             }
+            else {
+                System.out.println("Invalid choice, try again.");
+                continue;
+            }
 
             boolean useAbility = rand.nextBoolean();
             if(useAbility && !enemy.spells.isEmpty()) {
