@@ -4,7 +4,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.SortedSet;
@@ -86,58 +85,4 @@ public class JsonInput {
             newCharacter = new Mage(cname, experience, lvl);
         return newCharacter;
     }
-
-
-    public static void writeAccountsToJson(ArrayList<Account> accounts) {
-        JSONObject jsonObject = new JSONObject();
-        JSONArray accountsArray = new JSONArray();
-
-        for (Account account : accounts) {
-            JSONObject accountJson = new JSONObject();
-
-            Account.Information info = account.getInformation();
-            accountJson.put("name", info.getName());
-            accountJson.put("country", info.getCountry());
-            accountJson.put("maps_completed", String.valueOf(account.getGamesNumber()));
-
-            JSONObject credentialsJson = new JSONObject();
-            Credentials credentials = info.getCredentials();
-            if (credentials != null) {
-                credentialsJson.put("email", credentials.getEmail());
-                credentialsJson.put("password", credentials.getPassword());
-            }
-            accountJson.put("credentials", credentialsJson);
-
-            JSONArray favoriteGamesArray = new JSONArray();
-            for (String game : info.getFavoriteGames()) {
-                favoriteGamesArray.add(game);
-            }
-            accountJson.put("favorite_games", favoriteGamesArray);
-
-            JSONArray charactersArray = new JSONArray();
-            for (Character character : account.getCharacters()) {
-                JSONObject characterJson = new JSONObject();
-                characterJson.put("name", character.name);
-                characterJson.put("profession", character.getClass().getSimpleName());
-                characterJson.put("level", String.valueOf(character.level));
-                characterJson.put("experience", character.experience);
-                charactersArray.add(characterJson);
-            }
-            accountJson.put("characters", charactersArray);
-
-            accountsArray.add(accountJson);
-        }
-
-        jsonObject.put("accounts", accountsArray);
-
-        // Write JSON to file
-        try (FileWriter file = new FileWriter(accountPath)) {
-            file.write(jsonObject.toJSONString());
-            file.flush();
-            System.out.println("Successfully written accounts to JSON.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 }

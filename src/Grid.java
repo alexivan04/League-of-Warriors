@@ -156,8 +156,8 @@ public class Grid extends ArrayList<ArrayList<Cell>> {
             for (int j = 0; j < columns; j++) {
                 if (playerCell.getX() == i && playerCell.getY() == j) {
                     System.out.print("P ");
-//                } else if (!get(i).get(j).isVisited()) {
-//                    System.out.print("N ");
+                } else if (!get(i).get(j).isVisited()) {
+                    System.out.print("N ");
                 } else {
                     switch (get(i).get(j).getType()) {
                         case VOID:

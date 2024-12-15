@@ -28,6 +28,5 @@ public class Test {
         game.map.goSouth();
         game.makeAction();
         game.gameEnded = true;
-//        JsonInput.writeAccountsToJson(game.accounts);
     }
 }

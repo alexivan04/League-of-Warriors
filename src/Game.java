@@ -134,7 +134,6 @@ public class Game {
         Character playerCpy = map.getPlayer();
         map = Grid.generateGrid(rand.nextInt(6) + 5, rand.nextInt(6) + 5);
         map.setPlayer(playerCpy);
-        JsonInput.writeAccountsToJson(accounts);
     }
 
     public void chooseNextAction() throws InvalidGridSize {
@@ -183,7 +182,6 @@ public class Game {
                 case 'Q':
                 case 'q':
                     gameEnded = true;
-                    JsonInput.writeAccountsToJson(accounts);
                     return;
                 default:
                     System.out.println("Invalid direction, try again.");

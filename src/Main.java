@@ -16,6 +16,8 @@ public class Main {
             game.map.setPlayer(game.currCharacter);
             while (!game.gameEnded) {
                 game.chooseNextAction();
+                if(game.gameEnded)
+                    break;
                 game.makeAction();
             }
         }
