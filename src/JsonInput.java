@@ -82,13 +82,6 @@ public class JsonInput {
         int lvl = Integer.parseInt((String) characterObj.get("level"));
         int experience = ((Long) characterObj.get("experience")).intValue();
 
-        Character newCharacter = null;
-        if ("Warrior".equals(profession))
-            newCharacter = new Warrior(cname, experience, lvl);
-        else if ("Rogue".equals(profession))
-            newCharacter = new Rogue(cname, experience, lvl);
-        else if ("Mage".equals(profession))
-            newCharacter = new Mage(cname, experience, lvl);
-        return newCharacter;
+        return CharacterFactory.createCharacter(cname, profession, lvl, experience);
     }
 }
