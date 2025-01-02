@@ -1,4 +1,4 @@
-abstract public class Spell {
+abstract public class Spell implements Visitor<Entity>{
     int damage;
     int manaCost;
 

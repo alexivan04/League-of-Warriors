@@ -1,7 +1,8 @@
 import java.util.ArrayList;
 import java.util.Random;
 
-public abstract class Entity implements Battle{
+public abstract class Entity implements Element<Entity>, Battle{
+    public String name;
     ArrayList<Spell> spells;
     int health, maxHealth;
     int mana, maxMana;
@@ -60,28 +61,23 @@ public abstract class Entity implements Battle{
         }
     }
 
-    void useAbility(int i, Entity entity) {
-        Spell currSpell = spells.get(i);
-        if (mana >= currSpell.manaCost) {
-            if(currSpell.getClass().equals(Ice.class) && iceImmunity ||
-               currSpell.getClass().equals(Fire.class) && fireImmunity ||
-               currSpell.getClass().equals(Earth.class) && earthImmunity) {
-                System.out.println(entity.getClass().getSimpleName() + " has " + currSpell.getClass().getSimpleName() + " resistance.");
-                entity.receiveDamage(getDamage());
-                spells.remove(i);
-                useMana(currSpell.manaCost);
-            }
+    void useAbility(int i, Entity target) {
+        Spell spell = spells.get(i);
 
-            else {
-                System.out.println(currSpell.getClass().getSimpleName() + " damaged " + entity.getClass().getSimpleName());
-                entity.receiveDamage(currSpell.damage + getDamage());
-                spells.remove(i);
-                useMana(currSpell.manaCost);
-            }
-        }
-        else {
-            System.out.println("Not enough mana, using normal attack!");
-            entity.receiveDamage(getDamage());
+        if (mana >= spell.manaCost) {
+            System.out.println(name + " uses " + spell + " on " + target.name);
+            target.accept(spell);
+            spells.remove(i);
+            useMana(spell.manaCost);
+        } else {
+            System.out.println(name + " doesn't have enough mana! Performing a normal attack.");
+            target.receiveDamage(getDamage());
         }
     }
+
+    @Override
+    public void accept(Visitor<Entity> visitor) {
+        visitor.visit(this);
+    }
+
 }

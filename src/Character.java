@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class Character extends Entity{
-    String name;
     int experience;
     final int experienceTreshold = 25;
     int level;
