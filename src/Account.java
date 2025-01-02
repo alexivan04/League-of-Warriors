@@ -6,18 +6,17 @@ public class Account {
     Information information;
     int gamesNumber;
 
-    public static class Information
-    {
-        private Credentials credentials;
-        private SortedSet<String> favoriteGames;
-        private String name;
-        private String country;
+    public static class Information {
+        private final Credentials credentials;
+        private final SortedSet<String> favoriteGames;
+        private final String name;
+        private final String country;
 
-        public Information(Credentials credentials, SortedSet<String> favoriteGames, String name, String country) {
-            this.credentials = credentials;
-            this.favoriteGames = favoriteGames;
-            this.name = name;
-            this.country = country;
+        private Information(Builder builder) {
+            this.credentials = builder.credentials;
+            this.favoriteGames = builder.favoriteGames;
+            this.name = builder.name;
+            this.country = builder.country;
         }
 
         public Credentials getCredentials() {
@@ -36,20 +35,38 @@ public class Account {
             return country;
         }
 
-        public void setCredentials(Credentials credentials) {
-            this.credentials = credentials;
-        }
+        public static class Builder {
+            private Credentials credentials;
+            private SortedSet<String> favoriteGames;
+            private String name;
+            private String country;
 
-        public void setFavoriteGames(SortedSet<String> favoriteGames) {
-            this.favoriteGames = favoriteGames;
-        }
+            public Builder() {
+            }
 
-        public void setName(String name) {
-            this.name = name;
-        }
+            public Builder setCredentials(Credentials credentials) {
+                this.credentials = credentials;
+                return this;
+            }
 
-        public void setCountry(String country) {
-            this.country = country;
+            public Builder setFavoriteGames(SortedSet<String> favoriteGames) {
+                this.favoriteGames = favoriteGames;
+                return this;
+            }
+
+            public Builder setName(String name) {
+                this.name = name;
+                return this;
+            }
+
+            public Builder setCountry(String country) {
+                this.country = country;
+                return this;
+            }
+
+            public Information build() {
+                return new Information(this);
+            }
         }
     }
 
