@@ -1,7 +1,7 @@
 # League of Warriors
-
+## Ivan Alexandru-Marian - 322CC
 ## Description
-League of Warriors is an action-packed multiplayer game where players can choose their warriors, engage in battles, and compete to become the ultimate champion. The game features different character classes such as Mage, Rogue, and Warrior, each with unique abilities and attributes.
+League of Warriors is an action-packed game where players can choose their warriors, engage in battles, and compete to become the ultimate champion. The game features different character classes such as Mage, Rogue, and Warrior, each with unique abilities and attributes.
 
 ## Features
 
@@ -41,7 +41,7 @@ League of Warriors is an action-packed multiplayer game where players can choose
 - **Grid-Based Movement**: Players navigate a grid, encountering enemies, sanctuaries, and portals.
 - **Combat System**: Players can attack enemies or use abilities during battles.
 - **Level Progression**: Players complete levels by reaching portals and gain experience to level up.
-- **Data Persistence**: Player progress is saved to [`accounts.json`](accounts.json ).
+
 
 ### Development time
 
