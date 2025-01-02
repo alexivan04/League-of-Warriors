@@ -1,6 +1,6 @@
 public class Test {
     public static void main(String[] args) throws InvalidGridSize {
-        Game game = new Game();
+        Game game = Game.getInstance();
         game.username = "marcel@yahoo.com";
         game.password = "6K7GUxjsAc";
         game.useKeyboardInput = false;

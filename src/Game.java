@@ -2,6 +2,7 @@ import java.util.*;
 import java.util.Random;
 
 public class Game {
+    private static Game instance = null;
     ArrayList <Account> accounts;
     Grid map;
     boolean gameEnded;
@@ -18,13 +19,20 @@ public class Game {
     int attackChoice;
     boolean useKeyboardInput;
 
-    public Game() {
+    private Game() {
         gameEnded = false;
         level = 1;
         input = new Scanner(System.in);
         rand = new Random();
         characterChoice = -1;
         useKeyboardInput = true;
+    }
+
+    public static Game getInstance() {
+        if(instance == null) {
+            instance = new Game();
+        }
+        return instance;
     }
 
     public void makeAction() {
