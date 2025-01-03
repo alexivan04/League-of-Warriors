@@ -203,78 +203,72 @@ public class Game {
         }
     }
 
-    public void run() throws InvalidGridSize {
+    public void login() {
         accounts = JsonInput.deserializeAccounts();
         boolean wrongPassword;
         boolean wrongUsername;
         loggedIn = false;
 
-        while(!loggedIn) {
-             wrongPassword = false;
-             wrongUsername = false;
-             gameEnded = false;
+        wrongPassword = false;
+        wrongUsername = false;
+        gameEnded = false;
 
-            for (Account account : accounts) {
-                currAccount = account;
-                wrongUsername = false;
-                if (currAccount.getInformation().getCredentials().getEmail().compareTo(username) == 0) {
-                    if (currAccount.getInformation().getCredentials().getPassword().compareTo(password) == 0) {
-                        loggedIn = true;
-                        break;
-                    } else {
-                        wrongPassword = true;
-                        break;
-                    }
-                }
-                wrongUsername = true;
-            }
-
-            if (wrongUsername) {
-                System.out.println("Email not found, try again");
-                loggedIn = false;
-                break;
-            }
-            else if (wrongPassword) {
-                System.out.println("Wrong password, try again");
-                loggedIn = false;
-                break;
-            }
-
-            else if (loggedIn) {
-                boolean invalidChoice = true;
-                System.out.println("Welcome, " + currAccount.getInformation().getName() + "!");
-
-                while(invalidChoice) {
-                    invalidChoice = false;
-                    System.out.println("Choose your character: ");
-                    for (int i = 0; i < currAccount.getCharacters().size(); i++) {
-                        System.out.println("Option " + i);
-                        currAccount.getCharacters().get(i).printCharacter();
-                    }
-
-                    if(useKeyboardInput) {
-                        try {
-                            characterChoice = input.nextInt();
-                        } catch (InputMismatchException e) {
-                            System.out.println("Invalid input, try again.");
-                            input.nextLine();
-                            invalidChoice = true;
-                            continue;
-                        }
-                    }
-
-                    if (characterChoice < 0 || characterChoice >= currAccount.getCharacters().size()) {
-                        System.out.println("Invalid choice, try again.");
-                        invalidChoice = true;
-                    }
-                    else {
-                        System.out.println("Playing as " + currAccount.getCharacters().get(characterChoice).name);
-                        currCharacter = currAccount.getCharacters().get(characterChoice);
-                        System.out.println("Characteristics: \n\t-strength: " + currCharacter.strength + "\n\t-charisma: " + currCharacter.charisma +
-                                "\n\t-dexterity: " + currCharacter.dexterity);
-                    }
+        for (Account account : accounts) {
+            currAccount = account;
+            wrongUsername = false;
+            if (currAccount.getInformation().getCredentials().getEmail().compareTo(username) == 0) {
+                if (currAccount.getInformation().getCredentials().getPassword().compareTo(password) == 0) {
+                    loggedIn = true;
+                    return;
+                } else {
+                    wrongPassword = true;
+                    break;
                 }
             }
+            wrongUsername = true;
+        }
+
+        if (wrongUsername) {
+            System.out.println("Email not found, try again");
+            loggedIn = false;
+            return;
+        } else if (wrongPassword) {
+            System.out.println("Wrong password, try again");
+            loggedIn = false;
+            return;
+        }
+    }
+
+    public boolean run() throws InvalidGridSize {
+        boolean validChoice = true;
+
+        System.out.println("Choose your character: ");
+        for (int i = 0; i < currAccount.getCharacters().size(); i++) {
+            System.out.println("Option " + i);
+            currAccount.getCharacters().get(i).printCharacter();
+        }
+
+        if (useKeyboardInput) {
+            try {
+                characterChoice = input.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input, try again.");
+                input.nextLine();
+                validChoice = false;
+                return validChoice;
+            }
+        }
+
+        if (characterChoice < 0 || characterChoice >= currAccount.getCharacters().size()) {
+            System.out.println("Invalid choice, try again.");
+            validChoice = false;
+            return validChoice;
+        } else {
+            System.out.println("Playing as " + currAccount.getCharacters().get(characterChoice).name);
+            currCharacter = currAccount.getCharacters().get(characterChoice);
+            System.out.println("Characteristics: \n\t-strength: " + currCharacter.strength + "\n\t-charisma: " + currCharacter.charisma +
+                    "\n\t-dexterity: " + currCharacter.dexterity);
+            return validChoice;
         }
     }
 }

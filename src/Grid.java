@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Grid extends ArrayList<ArrayList<Cell>> {
-    private final int rows;
-    private final int columns;
+    final int rows;
+    final int columns;
     private Character player;
     private Cell playerCell;
 

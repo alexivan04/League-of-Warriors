@@ -7,7 +7,103 @@ public class MainGUI {
     static Game game = Game.getInstance();
     static JFrame loginFrame;
     static JFrame chooseCharacterFrame;
+    static JFrame mainGameMapFrame;
+    static JFrame battleFrame;
+    static JFrame endgameFrame;
 
+    // displays map of the game, as a grid of cells
+    // each cell can be empty, contain a portal, a sanctuary, or an enemy
+    // player can move around the map using arrow keys
+    static private void setupMainGameMapFrame() {
+        mainGameMapFrame = new JFrame("Main Game Map");
+        mainGameMapFrame.setSize(800, 600);
+        mainGameMapFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Layout: BorderLayout for overall frame structure
+        mainGameMapFrame.setLayout(new BorderLayout());
+
+        // Create the grid of labels representing the game map
+        System.out.println("rows: " + game.map.rows + ", columns: " + game.map.columns);
+        JLabel[][] gridLabels = new JLabel[game.map.rows][game.map.columns];
+        JPanel gridPanel = new JPanel(new GridLayout(game.map.rows, game.map.columns));
+
+        for (int i = 0; i < game.map.rows; i++) {
+            for (int j = 0; j < game.map.columns; j++) {
+                gridLabels[i][j] = new JLabel();
+                gridLabels[i][j].setPreferredSize(new Dimension(50, 50)); // Adjust size
+                gridLabels[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                gridLabels[i][j].setHorizontalAlignment(SwingConstants.CENTER);
+                gridLabels[i][j].setVerticalAlignment(SwingConstants.CENTER);
+
+                // Set content based on cell type and visited status
+                if (game.map.getPlayerCell().getX() == i && game.map.getPlayerCell().getY() == j) {
+                    gridLabels[i][j].setText("P");
+                } else if (!game.map.get(i).get(j).isVisited()) {
+                    gridLabels[i][j].setText("?");
+                } else {
+                    switch (game.map.get(i).get(j).getType()) {
+                        case VOID:
+                            gridLabels[i][j].setText("V");
+                            break;
+                        case ENEMY:
+                            gridLabels[i][j].setText("E");
+                            break;
+                        case SANCTUARY:
+                            gridLabels[i][j].setText("S");
+                            break;
+                        case PORTAL:
+                            gridLabels[i][j].setText("F");
+                            break;
+                    }
+                }
+                gridPanel.add(gridLabels[i][j]);
+            }
+        }
+        mainGameMapFrame.add(gridPanel, BorderLayout.CENTER);
+
+        // Upper-left: Controls for movement
+        JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Center the controls
+        controlPanel.setBorder(BorderFactory.createTitledBorder("Controls"));
+
+        JButton moveUpButton = new JButton("W - MOVE UP");
+        JButton moveDownButton = new JButton("S - MOVE DOWN");
+        JButton moveLeftButton = new JButton("A - MOVE LEFT");
+        JButton moveRightButton = new JButton("D - MOVE RIGHT");
+
+        // Add action listeners to movement buttons
+        // Uncomment and implement as needed
+        // moveUpButton.addActionListener(e -> movePlayer("UP", gridLabels));
+        // moveDownButton.addActionListener(e -> movePlayer("DOWN", gridLabels));
+        // moveLeftButton.addActionListener(e -> movePlayer("LEFT", gridLabels));
+        // moveRightButton.addActionListener(e -> movePlayer("RIGHT", gridLabels));
+
+        controlPanel.add(moveUpButton);
+        controlPanel.add(moveDownButton);
+        controlPanel.add(moveLeftButton);
+        controlPanel.add(moveRightButton);
+
+        mainGameMapFrame.add(controlPanel, BorderLayout.SOUTH);
+
+        // Bottom-left: Player stats
+        JPanel statsPanel = new JPanel();
+        statsPanel.setLayout(new BoxLayout(statsPanel, BoxLayout.Y_AXIS));
+        statsPanel.setBorder(BorderFactory.createTitledBorder("Player Stats"));
+
+        JLabel levelLabel = new JLabel("Level: " + game.map.getPlayer().level);
+        JLabel experienceLabel = new JLabel("Experience: " + game.map.getPlayer().experience);
+        JLabel healthLabel = new JLabel("Health: " + game.map.getPlayer().health);
+        JLabel manaLabel = new JLabel("Mana: " + game.map.getPlayer().mana);
+
+        statsPanel.add(levelLabel);
+        statsPanel.add(experienceLabel);
+        statsPanel.add(healthLabel);
+        statsPanel.add(manaLabel);
+
+        mainGameMapFrame.add(statsPanel, BorderLayout.WEST);
+
+        // Make the frame visible
+        mainGameMapFrame.setVisible(true);
+    }
 
     // a scrollable list of all Characters loaded for current account in game
     // player can click on a Character to select it and then click "Play" to start the game
@@ -88,19 +184,12 @@ public class MainGUI {
                 int index = characterList.getSelectedIndex();
                 if (index != -1) {
                     game.currCharacter = game.currAccount.getCharacters().get(index);
-                    chooseCharacterFrame.setVisible(false);
                     game.map = Grid.generateGrid(6, 6);
                     game.map.setPlayer(game.currCharacter);
                     game.gameEnded = false;
-                    game.run();
-                    game.map = Grid.generateGrid(6, 6);
-                    game.map.setPlayer(game.currCharacter);
-                    while (!game.gameEnded) {
-                        game.chooseNextAction();
-                        if (game.gameEnded)
-                            break;
-                        game.makeAction();
-                    }
+                    chooseCharacterFrame.setVisible(false);
+                    setupMainGameMapFrame();
+                    mainGameMapFrame.setVisible(true);
                 }
             }
         });
