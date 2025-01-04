@@ -24,7 +24,7 @@ public class MainGUI {
     // each cell can be empty, contain a portal, a sanctuary, or an enemy
     // player can move around the map using arrow keys
     static private void setupMainGameMapFrame() {
-        mainGameMapFrame = new JFrame("Main Game Map");
+        mainGameMapFrame = new JFrame("LEVEL " + game.level);
         mainGameMapFrame.setSize(800, 600);
         mainGameMapFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -248,7 +248,22 @@ public class MainGUI {
     }
 
     static private void portalActionWrapper() {
-        return;
+        // display level finished dialogue
+        JOptionPane.showMessageDialog(mainGameMapFrame, "Leveled UP: " + game.level + 1, "Level UP", JOptionPane.INFORMATION_MESSAGE);
+
+        // generate new map
+        game.map.getPlayer().addExperience(game.level * 5);
+        game.level++;
+        game.currAccount.gamesNumber++;
+        game.map.getPlayer().regenMana(game.map.getPlayer().maxMana);
+        game.map.getPlayer().regenHealth(game.map.getPlayer().health);
+        Character playerCpy = game.map.getPlayer();
+        game.map = Grid.generateGrid(rand.nextInt(6) + 5, rand.nextInt(6) + 5);
+        game.map.setPlayer(playerCpy);
+        mainGameMapFrame.dispose();
+        setupMainGameMapFrame();
+        mainGameMapFrame.setVisible(true);
+        // load the new map
     }
 
     static private void sanctuaryActionWrapper() {
